@@ -3,7 +3,7 @@
  * Covid cases, Covid deaths, and land area in km²
  *
  * @author Austin McCallister (N01487083)
- * @version 09/05/22
+ * @version 09/09/22
  */
 public class Country {
   private String name;
@@ -18,13 +18,13 @@ public class Country {
    * Constructor for the Country object containing its name, capitol, population, GDP in USD,
    * Covid cases, Covid deaths, and land area in km²
    *
-   * @param  name The name of the country
-   * @param  capitol The capitol of the country
-   * @param  population The population of the country
-   * @param  GDP The GDP of the country in USD
-   * @param  covidCases The number of Covid cases in the country
-   * @param  covidDeaths The number of Covid deaths in the country
-   * @param  area The land area of the country in km²
+   * @param  name  The name of the country
+   * @param  capitol  The capitol of the country
+   * @param  population  The population of the country
+   * @param  GDP  The GDP of the country in USD
+   * @param  covidCases  The number of Covid cases in the country
+   * @param  covidDeaths  The number of Covid deaths in the country
+   * @param  area  The land area of the country in km²
    */
   public Country(String name, String capitol, double population, double GDP, double covidCases, double covidDeaths, double area) {
     this.name = name;
@@ -84,7 +84,7 @@ public class Country {
   /**
    * Sets country population
    *
-   * @param  population The population of the country
+   * @param  population  The population of the country
    */
   public void setPopulation(double population) {
     this.population = population;
@@ -102,7 +102,7 @@ public class Country {
   /**
    * Sets country GDP in USD
    *
-   * @param  GDP The GDP of the country in USD
+   * @param  GDP  The GDP of the country in USD
    */
   public void setGDP(double GDP) {
     this.GDP = GDP;
@@ -120,7 +120,7 @@ public class Country {
   /**
    * Sets country Covid cases
    *
-   * @param  covidCases The number of Covid cases in the country
+   * @param  covidCases  The number of Covid cases in the country
    */
   public void setCovidCases(double covidCases) {
     this.covidCases = covidCases;
@@ -138,7 +138,7 @@ public class Country {
   /**
    * Sets country Covid deaths
    *
-   * @param  covidDeaths The number of Covid deaths in the country
+   * @param  covidDeaths  The number of Covid deaths in the country
    */
   public void setCovidDeaths(double covidDeaths) {
     this.covidDeaths = covidDeaths;
@@ -156,28 +156,67 @@ public class Country {
   /**
    * Sets country land area in km²
    *
-   * @param  area The land area of the country in km²
+   * @param  area  The land area of the country in km²
    */
   public void setArea(double area) {
     this.area = area;
   }
 
   /**
+   * Calculates and returns GDP per capita
+   *
+   * @return The country's GDP per capita
+   */
+  public double getGDPPC() {
+    return (GDP / population);
+  }
+
+  /**
+   * Calculates and returns the Covid fatality rate
+   *
+   * @return The country's Covid fatality rate
+   */
+  public double getCFR() {
+    return (covidDeaths / covidCases);
+  }
+
+  /**
+   * Calculates and returns the Covid case rate per 100,000 people
+   *
+   * @return The country's Covid case rate per 100,000 people
+   */
+  public double getCaseRate() {
+    return ((covidCases / population) * 100000);
+  }
+
+  /**
+   * Calculates and returns the Covid death rate per 100,000 people
+   *
+   * @return The country's Covid death rate per 100,000 people
+   */
+  public double getDeathRate() {
+    return ((covidDeaths / population) * 100000);
+  }
+
+  /**
+   * Calculates and returns the population density
+   *
+   * @return The country's population density
+   */
+  public double getPopDensity() {
+    return (population / area);
+  }
+
+  /**
    * Prints country data to console
    */
   public void print() {
-    double GDPPC = (GDP / population);
-    double CFR = (covidDeaths / covidCases);
-    double caseRate = ((covidCases / population) * 100000);
-    double deathRate = ((covidDeaths / population) * 100000);;
-    double popDensity = (population / area);
-
     System.out.printf("Name:       %s\n", name);
     System.out.printf("Capitol:    %s\n", capitol);
-    System.out.printf("GDPPC:      %.3f\n", GDPPC);
-    System.out.printf("CFR:        %.6f\n", CFR);
-    System.out.printf("CaseRate:   %.3f\n", caseRate);
-    System.out.printf("DeathRate:  %.3f\n", deathRate);
-    System.out.printf("PopDensity: %.3f\n\n", popDensity);
+    System.out.printf("GDPPC:      %.3f\n", getGDPPC());
+    System.out.printf("CFR:        %.6f\n", getCFR());
+    System.out.printf("CaseRate:   %.3f\n", getCaseRate());
+    System.out.printf("DeathRate:  %.3f\n", getDeathRate());
+    System.out.printf("PopDensity: %.3f\n\n", getPopDensity());
   }
 }

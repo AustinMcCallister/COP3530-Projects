@@ -14,7 +14,7 @@ import java.util.Scanner;
  * algorithms, as well as calculating a Kendall's Tau matrix and printing data to the console
  *
  * @author Austin McCallister (N01487083)
- * @version 09/05/22
+ * @version 09/09/22
  */
 public class Project1 {
   /**
@@ -46,9 +46,9 @@ public class Project1 {
     boolean loaded = false;
     while (!loaded) {
       System.out.print("Enter the file name: ");
-      String filename = input.nextLine(); // TODO: Uncomment eventually
+      String filename = input.nextLine();
       try {
-        BufferedReader reader = new BufferedReader(new FileReader("src/" + filename));
+        BufferedReader reader = new BufferedReader(new FileReader(filename));
         reader.readLine(); // Remove header line from input
         String line;
         int i = 0;
@@ -190,24 +190,24 @@ public class Project1 {
         double b = 0;
         switch (field) {
           case 2 -> { // Sort by GDP per capita
-            a = (array[j].getGDP() / array[j].getPopulation());
-            b = (array[lowest].getGDP() / array[lowest].getPopulation());
+            a = array[j].getGDPPC();
+            b = array[lowest].getGDPPC();
           }
           case 3 -> { // Sort by case fatality rate
-            a = (array[j].getCovidDeaths() / array[j].getCovidCases());
-            b = (array[lowest].getCovidDeaths() / array[lowest].getCovidCases());
+            a = array[j].getCFR();
+            b = array[lowest].getCFR();
           }
           case 4 -> { // Sort by Covid case rate
-            a = ((array[j].getCovidCases() / array[j].getPopulation()) * 100000);
-            b = ((array[lowest].getCovidCases() / array[lowest].getPopulation()) * 100000);
+            a = array[j].getCaseRate();
+            b = array[lowest].getCaseRate();
           }
           case 5 -> { // Sort by Covid death rate
-            a = ((array[j].getCovidDeaths() / array[j].getPopulation()) * 100000);
-            b = ((array[lowest].getCovidDeaths() / array[lowest].getPopulation()) * 100000);
+            a = array[j].getDeathRate();
+            b = array[lowest].getDeathRate();
           }
           case 6 -> { // Sort by population density
-            a = (array[j].getPopulation() / array[j].getArea());
-            b = (array[lowest].getPopulation() / array[lowest].getArea());
+            a = array[j].getPopDensity();
+            b = array[lowest].getPopDensity();
           }
         }
         // If the value at the lower bound is less than the value of the currently recorded lowest value
@@ -238,8 +238,8 @@ public class Project1 {
     for (int i = 0; i < (array.length - 1); i++) {
       // Upper bound starts at the last item and decreases until it is lower than lower bound
       for (int j = (array.length - 1); j > i; j--) {
-        double a = (array[j].getGDP() / array[j].getPopulation());
-        double b = (array[j - 1].getGDP() / array[j - 1].getPopulation());
+        double a = array[j].getGDPPC();
+        double b = array[j - 1].getGDPPC();
         // If the value at the upper bound is less than the value of the previous item
         if (a < b) {
           // Save the current upper bound value in a temp variable
@@ -282,12 +282,12 @@ public class Project1 {
         // If the value at the midpoint is greater than the search term
         else if (array[mid].getName().toLowerCase().compareTo(search.toLowerCase()) > 0) {
           // Target is in the lower half, move upper bound to the index prior to the midpoint
-          upperBound = mid - 1;
+          upperBound = (mid - 1);
         }
         // The value at the midpoint is less than the search term
         else {
           // Target is in the upper half, move lower bound to the index successive to the midpoint
-          lowerBound = mid + 1;
+          lowerBound = (mid + 1);
         }
       }
       // If the loop terminates naturally, the item was not found
@@ -387,11 +387,11 @@ public class Project1 {
       System.out.printf("%-33s %-15s %-11.3f %-9.6f %-10.3f %-10.3f %-10.3f\n",
           country.getName(),
           country.getCapitol(),
-          (country.getGDP() / country.getPopulation()), // GDPPC
-          (country.getCovidDeaths() / country.getCovidCases()), // CFR
-          ((country.getCovidCases() / country.getPopulation()) * 100000), // CaseRate
-          ((country.getCovidDeaths() / country.getPopulation()) * 100000), // DeathRate
-          (country.getPopulation() / country.getArea())); // PopDensity
+          country.getGDPPC(),
+          country.getCFR(),
+          country.getCaseRate(),
+          country.getDeathRate(),
+          country.getPopDensity());
     }
     System.out.println();
   }
