@@ -30,8 +30,8 @@ public class Project1 {
     System.out.print("Instructor: Xudong Liu\n\n");
     System.out.print("Array Searches and Sorts\n");
 
-    loadArray(countries);
-    runMenu(countries);
+    int numElems = loadArray(countries);
+    runMenu(countries, numElems);
   }
 
   /**
@@ -39,12 +39,12 @@ public class Project1 {
    * sequentially into the Country array
    *
    * @param  array  The array to load country objects into
+   * @return The number of elements in the array
    */
-  public static void loadArray(Country[] array) {
+  public static int loadArray(Country[] array) {
     Scanner input = new Scanner(System.in);
 
-    boolean loaded = false;
-    while (!loaded) {
+    while (true) {
       System.out.print("Enter the file name: ");
       String filename = input.nextLine();
       try {
@@ -66,7 +66,7 @@ public class Project1 {
         }
         System.out.printf("\nThere were %d records read.\n\n", i);
         reader.close();
-        loaded = true;
+        return i;
       }
       catch (FileNotFoundException e) {
         System.out.println("File does not exist!");
@@ -96,8 +96,9 @@ public class Project1 {
    * until the user inputs the quit command (7)
    *
    * @param  array  The array of country objects
+   * @param  numElems  The number of elements in the array
    */
-  public static void runMenu(Country[] array) {
+  public static void runMenu(Country[] array, int numElems) {
     Scanner input = new Scanner(System.in);
 
     printMenu();
@@ -112,29 +113,29 @@ public class Project1 {
             printMenu();
           }
           case 2 -> {
-            insertionSort(array);
+            insertionSort(array, numElems);
             System.out.print("\nCountries sorted by Name.\n\n");
             sortedByName = true;
             printMenu();
           }
           case 3 -> {
-            selectionSort(array, 3);
+            selectionSort(array, numElems, 3);
             System.out.print("\nCountries sorted by Case Fatality Rate.\n\n");
             sortedByName = false;
             printMenu();
           }
           case 4 -> {
-            bubbleSort(array);
+            bubbleSort(array, numElems);
             System.out.print("\nCountries sorted by GDP per capita.\n\n");
             sortedByName = false;
             printMenu();
           }
           case 5 -> {
-            printInfo(array, sortedByName);
+            printInfo(array, numElems, sortedByName);
             printMenu();
           }
           case 6 -> {
-            kendallMatrix(array);
+            kendallMatrix(array, numElems);
             printMenu();
           }
           case 7 -> System.out.print("\nHave a good day!\n");
@@ -152,10 +153,11 @@ public class Project1 {
    * Performs an insertion sort on the array to sort it by country name
    *
    * @param  array  The array of country objects
+   * @param  numElems  The number of elements in the array
    */
-  public static void insertionSort(Country[] array) {
+  public static void insertionSort(Country[] array , int numElems) {
     // For each item in the array, starting from the second item
-    for (int i = 1; i < array.length; i++) {
+    for (int i = 1; i < numElems; i++) {
       // Save the current upper bound value in a temp variable
       Country temp = array[i];
       // Set lower bound to the previous index
@@ -177,15 +179,16 @@ public class Project1 {
    * Covid case rate, Covid death rate, and population density
    *
    * @param  array  The array of country objects
+   * @param  numElems  The number of elements in the array
    * @param  field  The type of field to sort by
    */
-  public static void selectionSort(Country[] array, int field) {
+  public static void selectionSort(Country[] array, int numElems, int field) {
     // For each item in the array, until the second to last
-    for (int i = 0; i < (array.length - 1); i++) {
+    for (int i = 0; i < (numElems - 1); i++) {
       // Set the index of the lowest item to the index of the lower bound
       int lowest = i;
       // For each item in the array, starting from the second item
-      for (int j = (i + 1); j < array.length; j++) {
+      for (int j = (i + 1); j < numElems; j++) {
         double a = 0;
         double b = 0;
         switch (field) {
@@ -232,16 +235,15 @@ public class Project1 {
    * Performs a bubble sort on the array to sort it by GDP per capita
    *
    * @param  array  The array of country objects
+   * @param  numElems  The number of elements in the array
    */
-  public static void bubbleSort(Country[] array) {
+  public static void bubbleSort(Country[] array, int numElems) {
     // Lower bound starts at 0 and increases until the second to last item
-    for (int i = 0; i < (array.length - 1); i++) {
+    for (int i = 0; i < (numElems - 1); i++) {
       // Upper bound starts at the last item and decreases until it is lower than lower bound
-      for (int j = (array.length - 1); j > i; j--) {
-        double a = array[j].getGDPPC();
-        double b = array[j - 1].getGDPPC();
+      for (int j = (numElems - 1); j > i; j--) {
         // If the value at the upper bound is less than the value of the previous item
-        if (a < b) {
+        if (array[j].getGDPPC() < array[j - 1].getGDPPC()) {
           // Save the current upper bound value in a temp variable
           Country temp = array[j];
           // Set the value at the lower bound to the value of the previous item
@@ -258,9 +260,10 @@ public class Project1 {
    * to console, using a binary search if the array is sorted by name, and using sequential search otherwise
    *
    * @param  array  The array of country objects
+   * @param  numElems  The number of elements in the array
    * @param  sortedByName  Whether the array was sorted alphabetically by name or not
    */
-  public static void printInfo(Country[] array, boolean sortedByName) {
+  public static void printInfo(Country[] array, int numElems, boolean sortedByName) {
     Scanner input = new Scanner(System.in);
 
     System.out.print("\nEnter country name: ");
@@ -269,7 +272,7 @@ public class Project1 {
       System.out.print("\nBinary search is used\n\n");
       // Establish upper and lower bound indexes and declare the midpoint index
       int lowerBound = 0;
-      int upperBound = (array.length - 1);
+      int upperBound = (numElems - 1);
       int mid;
       while (lowerBound <= upperBound) {
         // Set midpoint index to the average of the upper and lower bounds, rounding down
@@ -297,10 +300,12 @@ public class Project1 {
       System.out.print("\nSequential search is used\n\n");
       // For each item in the array
       for (Country country : array) {
-        // Compare the name with the search term
-        if (country.getName().toLowerCase().compareTo(search.toLowerCase()) == 0) {
-          country.print();
-          return;
+        if (country != null) { // Do not attempt to work on null pointers
+          // Compare the name with the search term
+          if (country.getName().toLowerCase().compareTo(search.toLowerCase()) == 0) {
+            country.print();
+            return;
+          }
         }
       }
       // If the loop terminates naturally, the item was not found
@@ -313,22 +318,23 @@ public class Project1 {
    * sorts each array by its respective field, and outputs the resulting matrix to console
    *
    * @param  array  The array of country objects
+   * @param  numElems  The number of elements in the array
    */
-  public static void kendallMatrix(Country[] array) {
+  public static void kendallMatrix(Country[] array, int numElems) {
     Country[] GDPPCArray = array.clone();
     Country[] CaseRateArray = array.clone();
     Country[] DeathRateArray = array.clone();
     Country[] PopDensityArray = array.clone();
 
-    selectionSort(GDPPCArray, 2);
-    selectionSort(CaseRateArray, 4);
-    selectionSort(DeathRateArray, 5);
-    selectionSort(PopDensityArray, 6);
+    selectionSort(GDPPCArray, numElems, 2);
+    selectionSort(CaseRateArray, numElems, 4);
+    selectionSort(DeathRateArray, numElems, 5);
+    selectionSort(PopDensityArray, numElems, 6);
 
-    double x1 = kendallCompare(CaseRateArray, GDPPCArray);
-    double x2 = kendallCompare(CaseRateArray, PopDensityArray);
-    double x3 = kendallCompare(DeathRateArray, GDPPCArray);
-    double x4 = kendallCompare(DeathRateArray, PopDensityArray);
+    double x1 = kendallCompare(CaseRateArray, GDPPCArray, numElems);
+    double x2 = kendallCompare(CaseRateArray, PopDensityArray, numElems);
+    double x3 = kendallCompare(DeathRateArray, GDPPCArray, numElems);
+    double x4 = kendallCompare(DeathRateArray, PopDensityArray, numElems);
 
     System.out.print("\n---------------------------------------------\n");
     System.out.print("|                  |   GDPPC   | PopDensity |\n");
@@ -344,21 +350,22 @@ public class Project1 {
    *
    * @param  a  The first array to compare
    * @param  b  The second array to compare
+   * @param  numElems  The number of elements in the array
    */
-  public static double kendallCompare(Country[] a, Country[] b) {
+  public static double kendallCompare(Country[] a, Country[] b, int numElems) {
     int agree = 0;
-    int total = ((a.length * (a.length - 1)) / 2);
+    int total = ((numElems * (numElems - 1)) / 2);
     // For each country in the array up to the second to last element
-    for (int i = 0; i < (a.length - 1); i++) {
+    for (int i = 0; i < (numElems - 1); i++) {
       String first = a[i].getName();
       // Compare with each successive element up to the last element
-      for (int j = (i + 1); j < a.length; j++) {
+      for (int j = (i + 1); j < numElems; j++) {
         String second = a[j].getName();
         // Iterate through the second array until the first string is located
-        for (int k = 0; k < b.length; k++) {
+        for (int k = 0; k < numElems; k++) {
           // Once found, check remaining elements to see if the second string is "greater" than the first
           if (b[k].getName().compareTo(first) == 0) {
-            for (int l = (k + 1); l < b.length; l++) {
+            for (int l = (k + 1); l < numElems; l++) {
               if (b[l].getName().compareTo(second) == 0) {
                 // The two pairs agree in the ranking
                 agree++;
@@ -372,7 +379,7 @@ public class Project1 {
       }
     }
     int disagree = (total - agree);
-    return ((agree - disagree) / ((a.length * (a.length - 1.0)) / 2.0));
+    return ((agree - disagree) / ((numElems * (numElems - 1.0)) / 2.0));
   }
 
   /**
@@ -384,14 +391,16 @@ public class Project1 {
     System.out.print("\nName                              Capitol         GDPPC       CFR       CaseRate   DeathRate  PopDensity\n");
     System.out.println("--------------------------------------------------------------------------------------------------------");
     for (Country country : array) {
-      System.out.printf("%-33s %-15s %-11.3f %-9.6f %-10.3f %-10.3f %-10.3f\n",
-          country.getName(),
-          country.getCapitol(),
-          country.getGDPPC(),
-          country.getCFR(),
-          country.getCaseRate(),
-          country.getDeathRate(),
-          country.getPopDensity());
+      if (country != null) { // Do not attempt to print from null pointers
+        System.out.printf("%-33s %-15s %-11.3f %-9.6f %-10.3f %-10.3f %-10.3f\n",
+            country.getName(),
+            country.getCapitol(),
+            country.getGDPPC(),
+            country.getCFR(),
+            country.getCaseRate(),
+            country.getDeathRate(),
+            country.getPopDensity());
+      }
     }
     System.out.println();
   }
