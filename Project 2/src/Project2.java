@@ -13,7 +13,7 @@ import java.util.Scanner;
  * to a stack or priority queue, and printing the data from the stack or priority queue to console
  *
  * @author Austin McCallister (N01487083)
- * @version 09/28/22
+ * @version 09/30/22
  */
 public class Project2 {
   /**
@@ -41,7 +41,7 @@ public class Project2 {
    * @param  stack  The stack to load country objects into
    * @param  queue  The priority queue to load country objects into
    */
-  public static int loadData(Stack stack, PriorityQ queue) {
+  public static void loadData(Stack stack, PriorityQ queue) {
     Scanner input = new Scanner(System.in);
 
     while (true) {
@@ -65,7 +65,7 @@ public class Project2 {
           i++;
         }
         System.out.printf("\nThere were %d records read.\n", i);
-        return i;
+        return;
       }
       catch (FileNotFoundException e) {
         System.out.println("File does not exist!");
@@ -124,7 +124,7 @@ public class Project2 {
               }
             }
             else {
-              System.out.println("Error: Stack is full");
+              System.out.println("\nError: Stack is full");
             }
             printMenu();
           }
@@ -146,7 +146,7 @@ public class Project2 {
               }
             }
             else {
-              System.out.println("Error: Stack is full");
+              System.out.println("\nError: Priority Queue is full");
             }
             printMenu();
           }
